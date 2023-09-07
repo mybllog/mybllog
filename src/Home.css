@@ -1,0 +1,6 @@
+@media (max-width: 768px) {
+    /* adjust styles for smaller screens */
+    .mt-14 {
+      margin-top: 8px;
+    }
+  }
