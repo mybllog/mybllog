@@ -1,38 +1,60 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 
 import Searchbar from "../components/Searchbar";
 import "../Home.css";
-import Searchable from "../components/Searchable";
+
 import Products from "../components/Products";
 import Pics from "../components/Pics";
+import Images from "../components/Images";
+import Footers from "../components/Footer"
+import { MapComponent } from "../components/Map";
+import {InfinitySpin,MutatingDots,Grid} from "react-loader-spinner"
+
 
 const Home = () => {
+  const [ loading, setLoading] = useState(false)
+
+  useEffect(()=>{
+    setLoading(true)
+    setTimeout(()=>{
+      setLoading(false)
+    },2000)
+  },[])
   return (
     <div className="">
       <div>
-        
-      </div>
-
-      <Searchable />
-      <div className="">
-        <Searchbar />
-      </div>
-
-      <div >
-       
+        {
+          loading?
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center' , position:'relative', top:200 }}>
+            <Grid color={'pink'} loading={loading} size={150} margin={9} radius={12.5} width={80} height={80} ariaLabel='grid-loading' />
+          </div>
+          :
+          <>
+          <div className="">
+          <Searchbar />
+        </div>
+  
+        <div>
           <Products />
-    
-      </div>
-      <div
-        className="flex  border top-96 w-9/12 py-28 m-0 mx-7 my-36 left-10 h-96 rounded-2xl"
-        style={{
-          background: "linear-gradient(45deg, #CE048C, #4D0A8E)",
-        }}
-      >
+        </div>
+       
         <Pics />
+        <div>
+        <Images />
+        </div>
+  
+      
+        
+      
+
+          </>
+          
+        }
       </div>
 
-     
+      
+  
+    
     </div>
   );
 };

@@ -1,0 +1,51 @@
+/* Marquee Container */
+.marquee-container {
+  display: flex;
+  overflow: hidden;
+    width: 1200px;
+    background-color:"white";
+    user-select: none;
+    border:1px solid red
+    
+  }
+  
+  /* Marquee Content (Text to be scrolled) */
+  .marquee-content {
+    display: flex;
+    animation: marquee-animation 10s linear infinite;
+    align-items: center;
+    flex-shrink: 0;
+    white-space: nowrap;
+    width: 100%;
+    justify-content: space-around;
+    flex-wrap: nowrap; /* Ensure images stay on the same line */
+  }
+  
+
+  .ImageGroup {
+    display:grid;
+    place-items: center;
+    width: clamp((10rem,1rem + 40vmin,30rem)/10);
+    padding: calc(clamp(10rem,1rem + 30rem)/10)
+  }
+
+  .Image {
+    object-fit: contain;
+    max-width: 200px; /* Adjust the maximum width to make the images smaller */
+    max-height: 200px; /* Adjust the maximum height to make the images smaller */
+    border-radius: 0.5rem;
+    aspect-ratio: 16/9;
+    padding: 5px 10px; /* Adjust padding if needed */
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
+  
+  /* Keyframes for Animation */
+  @keyframes marquee-animation {
+    from {
+      transform: translateX(100%); /* Start from the left side */
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  

@@ -1,0 +1,33 @@
+
+
+.text {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  animation: marquee-animatio 10s linear infinite;
+  white-space: nowrap;
+  flex-wrap: start;
+}
+
+
+ .text span {
+  position: absolute;
+  font-size:5 ; /* Adjust the font size as needed */
+  transform-origin: 0 119px;
+  
+ 
+}
+  
+
+
+
+@keyframes marquee-animatio {
+    0%{
+      transform: rotate(0deg); /* Start from the right side */
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
