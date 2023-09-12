@@ -1,94 +1,61 @@
 const express = require("express");
 const app = express();
-
-
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session)
 const fs = require("fs");
 const mysql = require("mysql2");
-const { hostname } = require("os");
+
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const validator = require('validator');
+const config = require("./config");
 
+const internal = require("stream");
+const authRoutes = require('./routes/auth')
+const authRoute = require('./routes/contact')
+const authRout = require('./routes/product')
+const authBusiness = require('./routes/businessauth')
 app.use(cors());
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended:true}))
 
-const db = mysql.createConnection({
-  user: "root",
-  host: "localhost",
-  password: "Adaeze34567890",
-  database: "landing_page_db",
-  authPlugins: {
-    mysql_native_password: false
-  }
+
+
+const sessionStore = new MySQLStore({
+  host:config.MYSQL_HOST,
+  collection:config.MYSQL_STORE_COLLECTION,
+  user:config.MYSQL_USERNAME,
+  port:config.MYSQL_PORT,
+  password:config.MYSQL_ROOT_PASSWORD,
+  database:config.MYSQL_DATABASE,
 });
 
+app.use(session({
+  secret:config.MYSQL_STORE_SECRET_KEY,
+  resave:false,
+  store:sessionStore,
+  saveUninitialized:false,
+}))
 
-
-app.use('/',(req, res,next) => {
-
-})
 // Connect to MySQL
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to MySQL:', err);
-  } else {
-    console.log('Connected to MySQL');
-  }
-});
-// API endpoint to create a new user
-app.post('/users', (req, res) => {
-      const { location, name , email , password} = req.body
-      res.send({ message: 'User created successfully' });
 
-      db.query('insert into user (location,name, email, password) values(?,?,?,?)',[location,name,email,password],
-      (error, result) => {
-      if (error){
-        res.status(404).json({error:'internal server error'})
-      }else {
-        res.send('value inserted successfully')
-      }
-      
-       
-      })
+
+app.use('/auth', authRoutes)
+app.use('/contact', authRoute)
+app.use('/product', authRout)
+app.use('/authB', authBusiness)
+
+app.get('/', (req,res,next)=>{
+
+  req.session.isAuth = true;
+  console.log(req.session);
+  console.log(req.session.id);
+  next();
 })
-// API endpoint to retrieve all users
-   app.get('/users',(req,res) =>{
 
-      db.query('select * from user' ,
-      (error, result) => {
-      if (error){
-        console.log(error);
-        
-      }else {
-        res.send(result)
-      }
-      
-       
-      })
-      
-   })
 
-   app.get('/users:id',(req,res) =>{
 
-    db.query('select * from user' ,
-    (error, result) => {
-    if (error){
-      console.log(error);
-    }else {
-      res.send(result)
-    }
-    
-     
-    })
-    
- })
-
-   app.delete('/users',(req,res) =>{
-       res.status(200).json(users)
-      
-   })
-
-app.listen(3005, () => {
-  console.log("this app is listening on port 3005");
+app.listen(config.PORT, () => {
+  console.log(`This app is listening on port ${config.PORT}`);
 });
+
+
